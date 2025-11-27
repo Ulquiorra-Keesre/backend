@@ -1,4 +1,4 @@
-from sqlalchemy import select, and_, func, or_
+from sqlalchemy import select, and_, func, or_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from typing import List, Optional, Dict, Any

@@ -8,6 +8,7 @@ from .core import DatabaseManager
 from ..models.user import User, UserAuth
 from ..models.item import Item, ItemImage
 from ..models.category import Category
+from ..models.review import Review
 from ..models.rental import Rental
 from ..models.conversation import Conversation, ConversationParticipant
 from ..models.message import Message
@@ -198,8 +199,26 @@ class CategoryRepository(DatabaseManager):
         stmt = select(Category)
         result = await self.session.execute(stmt)
         return result.scalars().all()
+    
 
-# ------------------ Main Repository Facade ------------------
+# ==================== ReviewRepository ====================
+class ReviewRepository(DatabaseManager):
+    def __init__(self, session: AsyncSession):
+        super().__init__(session)
+        self.model = Review
+
+    async def get_reviews_about_user(self, user_id: UUID) -> List[Review]:
+        stmt = (
+            select(Review)
+            .where(Review.recipient_id == user_id)
+            .options(selectinload(Review.author))
+            .order_by(Review.created_at.desc())
+        )
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
+    
+
+# ------------------ Repository Facade ------------------
 class Repository:
     def __init__(self, session: AsyncSession):
         self.users = UserRepository(session)
@@ -208,3 +227,4 @@ class Repository:
         self.messages = MessageRepository(session)
         self.rentals = RentalRepository(session)
         self.categories = CategoryRepository(session)
+        self.reviews = ReviewRepository(session)

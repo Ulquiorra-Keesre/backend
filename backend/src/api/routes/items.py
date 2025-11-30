@@ -1,4 +1,3 @@
-# src/api/routes/items.py
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID

@@ -1,4 +1,3 @@
-# src/api/routes/rentals.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -112,7 +111,7 @@ async def confirm_rental(
         await repo.rentals.update(rental_id, status="active", confirmed_at=datetime.utcnow())
 
     updated_rental = await repo.rentals.get_by_id(rental_id)
-    
+
     return {
         "id": updated_rental.id,
         "status": updated_rental.status,

@@ -2,17 +2,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, List
 from uuid import UUID
 
-from src.queries import Repository  # ← теперь из __init__.py
+from src.queries import Repository 
 from src.models.user import User
 
-# ЗАГЛУШКИ: в реальности вынесите в src/schemas/user.py
 from pydantic import BaseModel, Field
 
 class UserCreate(BaseModel):
     email: str
     phone: Optional[str] = None
     full_name: str
-    password: str  # plain, будет хэшироваться
+    password: str  
 
 class UserResponse(BaseModel):
     id: UUID
@@ -21,10 +20,10 @@ class UserResponse(BaseModel):
     full_name: str
     avatar_url: Optional[str]
     rating: float
-    created_at: str  # или datetime, но для упрощения — str
+    created_at: str  
 
     class Config:
-        from_attributes = True  # для model_validate ORM
+        from_attributes = True  
 
 
 async def create_user(db: AsyncSession, user: UserCreate) -> UserResponse:
@@ -32,7 +31,6 @@ async def create_user(db: AsyncSession, user: UserCreate) -> UserResponse:
     from src.utils.security import get_password_hash
     repo = Repository(db)
 
-    # Проверка уникальности email
     existing = await repo.users.get_by_email(user.email)
     if existing:
         raise ValueError("Email already registered")

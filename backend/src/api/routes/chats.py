@@ -1,4 +1,3 @@
-# src/api/routes/chats.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -32,16 +31,13 @@ async def start_conversation(
     """Начать чат по предмету (если ещё не существует)"""
     repo = Repository(db)
     
-    # Проверяем, существует ли предмет
     item = await repo.items.get_by_id(Item, item_id)
     if not item:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Item not found")
     
-    # Запрещаем владельцу писать самому себе
     if item.owner_id == current_user:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Cannot start chat with yourself")
     
-    # Создаём или получаем беседу
     user_ids = [current_user, item.owner_id]
     conv = await repo.conversations.get_or_create_by_item(item_id, user_ids)
     return conv

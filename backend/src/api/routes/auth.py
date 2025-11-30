@@ -1,4 +1,3 @@
-# src/api/routes/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -16,7 +15,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def register(user: UserRegister, db: DatabaseDep):
     repo = Repository(db)
 
-    # Проверка: email уже существует?
+    # Проверка: email 
     existing = await repo.users.get_by_email(user.email)
     if existing:
         raise HTTPException(
@@ -43,7 +42,7 @@ async def register(user: UserRegister, db: DatabaseDep):
 
 @router.post("/login", response_model=Token)
 async def login(credentials: UserLogin, db: DatabaseDep):
-    # Получаем пользователя
+
     repo = Repository(db)
     user = await repo.users.get_by_email(credentials.email)
     if not user:
@@ -53,7 +52,6 @@ async def login(credentials: UserLogin, db: DatabaseDep):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Получаем хэш пароля из user_auth
     result = await db.execute(select(UserAuth).where(UserAuth.user_id == user.id))
     user_auth = result.scalar_one_or_none()
 
@@ -64,6 +62,5 @@ async def login(credentials: UserLogin, db: DatabaseDep):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Создаём токен
     access_token = create_access_token(data={"sub": str(user.id)})
     return Token(access_token=access_token, token_type="bearer")

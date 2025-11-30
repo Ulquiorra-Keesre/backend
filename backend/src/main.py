@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from src.api.routes import auth, chats, items, users
+from src.api.routes import auth, chats, items, users, categories
 from src.database.connection import create_tables
 from src.config import settings
 
@@ -37,6 +37,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(items.router, prefix="/api/items", tags=["Items"])
 app.include_router(chats.router, prefix="/api/chats", tags=["Chats"])
+app.include_router(categories.router, prefix="/api/categories", tags=["Categories"])
 
 @app.get("/")
 async def root():

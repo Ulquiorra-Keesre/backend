@@ -1,11 +1,17 @@
 # backend/main.py
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-
+from src.models.user import User
+from src.models.item import Item
+from src.models.conversation import Conversation
+from src.models.category import Category
+from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from src.api.routes import auth, chats, items, users, categories
 from src.database.connection import create_tables
 from src.config import settings
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+import traceback
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,11 +32,65 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        # добавьте другие если нужно
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
+# ========== EXCEPTION HANDLERS ==========
+@app.exception_handler(ResponseValidationError)
+async def response_validation_handler(request: Request, exc: ResponseValidationError):
+    """Обработчик ошибок валидации ответа"""
+    print(f"ResponseValidationError: {exc}")
+    print(traceback.format_exc())
+    
+    return JSONResponse(
+        status_code=200,  # Возвращаем 200 чтобы CORS заголовки работали
+        content={
+            "success": False,
+            "error": "Ошибка валидации ответа сервера",
+            "details": str(exc)
+        }
+    )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Глобальный обработчик исключений"""
+    print(f"Global exception: {exc}")
+    print(traceback.format_exc())
+    
+    return JSONResponse(
+        status_code=500,
+        content={
+            "success": False,
+            "error": "Внутренняя ошибка сервера",
+            "details": str(exc)
+        }
+    )
+
+# ========== OPTIONS HANDLER FOR CORS PREFLIGHT ==========
+@app.middleware("http")
+async def add_cors_headers(request: Request, call_next):
+    # Обрабатываем OPTIONS (preflight) запросы
+    if request.method == "OPTIONS":
+        response = JSONResponse(content={"message": "OK"})
+    else:
+        response = await call_next(request)
+    
+    # Добавляем CORS заголовки ко всем ответам
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Expose-Headers"] = "*"
+    
+    return response
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
@@ -41,7 +101,7 @@ app.include_router(categories.router, prefix="/api/categories", tags=["Categorie
 
 @app.get("/")
 async def root():
-    return {"message": "Система студенческих опросов API"}
+    return {"message": "Система ренты вещей API"} #правка
 
 @app.get("/health")
 async def health_check():

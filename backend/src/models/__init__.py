@@ -8,5 +8,3 @@ from .rental import Rental
 from .conversation import Conversation, ConversationParticipant
 from .message import Message
 from .review import Review
-from .user_rating import UserRatingsSummary
-from .achievement import Achievement, UserAchievement

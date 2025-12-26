@@ -2,7 +2,7 @@ from sqlalchemy import Column, SmallInteger, Text, DateTime, ForeignKey, Index, 
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from . import Base
+from src.database.connection import Base
 import uuid
 
 class Review(Base):

@@ -29,7 +29,7 @@ async def create_review(db: AsyncSession, author_id: UUID, review: ReviewCreate)
     repo = Repository(db)
 
     # Проверка аренды
-    rental = await repo.rentals.get_by_id(Rental, review.rental_id)  # ← нужно импортировать Rental
+    rental = await repo.rentals.get_by_id(Rental, review.rental_id)  
     if not rental or rental.tenant_id != author_id:
         raise ValueError("Invalid rental or unauthorized")
 

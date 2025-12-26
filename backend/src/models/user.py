@@ -12,9 +12,8 @@ class User(Base):
     email = Column(String, nullable=False, unique=True, index=True)
     phone = Column(String, unique=True, index=True)
     full_name = Column(String, nullable=False)
-    avatar_url = Column(String)
-    bio = Column(Text)
-    rating = Column(Numeric(3, 2), default=5.0, index=True)
+    #avatar_url = Column(String)
+    #bio = Column(Text)
     is_blocked = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -33,8 +32,8 @@ class UserAuth(Base):
     __tablename__ = "user_auth"
 
     user_id = Column(PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
-    social_id = Column(String, index=True)
-    auth_provider = Column(String, index=True)
+    #social_id = Column(String, index=True)
+    #auth_provider = Column(String, index=True)
     password_hash = Column(String)
 
     user = relationship("User", back_populates="auth")

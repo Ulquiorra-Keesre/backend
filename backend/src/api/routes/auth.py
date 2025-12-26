@@ -48,7 +48,7 @@ async def login(credentials: UserLogin, db: DatabaseDep):
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
+            detail="Invalid CREDentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -58,7 +58,7 @@ async def login(credentials: UserLogin, db: DatabaseDep):
     if not user_auth or not verify_password(credentials.password, user_auth.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
+            detail="Invalid cREdentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

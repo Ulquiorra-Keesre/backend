@@ -10,7 +10,7 @@ from uuid import UUID
 class CategoryResponse(BaseModel):
     id: UUID
     name: str
-    parent_id: Optional[UUID]
+    ##parent_id: Optional[UUID]
 
     class Config:
         from_attributes = True

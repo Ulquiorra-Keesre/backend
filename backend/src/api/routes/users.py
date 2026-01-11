@@ -5,9 +5,9 @@ from ..dependencies import get_db
 from src.queries.orm import Repository
 from src.models.user import User
 from src.api.dependencies import CurrentUser, DatabaseDep
-from src.queries.items import ItemCreate
+from src.queries.items import ItemCreate, create_item
 
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter()
 
 @router.get("/{user_id}")
 async def get_user(user_id: UUID, db: AsyncSession = Depends(get_db)):
@@ -30,7 +30,7 @@ async def get_user_reviews(user_id: UUID, db: AsyncSession = Depends(get_db)):
     return reviews
 
 @router.post("/items")
-async def create_item(
+async def create_user_item(
     item_data: ItemCreate,
     current_user: CurrentUser,  # ← UUID
     db: DatabaseDep

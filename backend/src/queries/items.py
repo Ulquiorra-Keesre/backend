@@ -19,6 +19,7 @@ class ItemCreate(BaseModel):
     latitude: float
     longitude: float
     image_urls: PydList[str] = []
+    is_available: bool = True
 
 class ItemResponse(BaseModel):
     id: UUID
@@ -32,8 +33,6 @@ class ItemResponse(BaseModel):
     latitude: float
     longitude: float
     is_available: bool
-    image_urls: PydList[str]
-    created_at: str
 
     class Config:
         from_attributes = True
@@ -52,8 +51,8 @@ class ItemResponse(BaseModel):
             latitude=float(item.latitude),
             longitude=float(item.longitude),
             is_available=item.is_available,
-            image_urls=[img.image_url for img in sorted(item.images, key=lambda x: x.order_index)],
-            created_at=item.created_at.isoformat() if item.created_at else ""
+            # image_urls=[img.image_url for img in sorted(item.images, key=lambda x: x.order_index)],
+            # created_at=item.created_at.isoformat() if item.created_at else ""
         )
 
 

@@ -67,6 +67,24 @@ class ItemRepository(DatabaseManager):
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
+    # async def create_with_images(self, item_data: dict, image_urls: List[str]) -> Item:
+    #     try:
+    #         item = Item(**item_data)
+    #         self.session.add(item)
+    #         await self.session.flush()
+
+    #         images = [
+    #             ItemImage(item_id=item.id, image_url=url, order_index=i)
+    #             for i, url in enumerate(image_urls)
+    #         ]
+    #         self.session.add_all(images)
+    #         await self.session.commit()
+    #         await self.session.refresh(item)
+    #         return item
+    #     except Exception as e:
+    #         await self.session.rollback()
+    #         raise
+
     async def create_with_images(self, item_data: dict, image_urls: List[str]) -> Item:
         try:
             item = Item(**item_data)
@@ -79,12 +97,11 @@ class ItemRepository(DatabaseManager):
             ]
             self.session.add_all(images)
             await self.session.commit()
-            await self.session.refresh(item)
+            # УБРАЛИ: await self.session.refresh(item)
             return item
         except Exception as e:
             await self.session.rollback()
             raise
-
 # ------------------ ConversationRepository ------------------
 class ConversationRepository(DatabaseManager):
     def __init__(self, session: AsyncSession):

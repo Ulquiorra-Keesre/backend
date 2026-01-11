@@ -5,7 +5,7 @@ from uuid import UUID
 from src.api.dependencies import DatabaseDep  
 from src.queries import Repository  
 
-router = APIRouter(prefix="/items", tags=["Items"])
+router = APIRouter()
 
 
 @router.get("/")

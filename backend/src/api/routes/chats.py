@@ -8,7 +8,7 @@ from src.queries import Repository
 from src.models.item import Item
 from src.models.conversation import ConversationParticipant
 
-router = APIRouter(prefix="/chats", tags=["Chats"])
+router = APIRouter()
 
 
 @router.get("/")

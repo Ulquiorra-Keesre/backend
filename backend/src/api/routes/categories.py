@@ -5,7 +5,7 @@ from src.api.dependencies import DatabaseDep
 from src.queries import Repository               
 from src.models.category import Category
 
-router = APIRouter(prefix="/categories", tags=["Categories"])
+router = APIRouter()
 
 @router.get("/")
 async def list_categories(db: DatabaseDep):  

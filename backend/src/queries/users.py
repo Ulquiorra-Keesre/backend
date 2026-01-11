@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, List
 from uuid import UUID
+from datetime import datetime
 
 from src.queries import Repository 
 from src.models.user import User
@@ -18,9 +19,9 @@ class UserResponse(BaseModel):
     email: str
     phone: Optional[str]
     full_name: str
-    avatar_url: Optional[str]
-    rating: float
-    created_at: str  
+    # avatar_url: Optional[str]
+    # rating: float
+    created_at: datetime
 
     class Config:
         from_attributes = True  

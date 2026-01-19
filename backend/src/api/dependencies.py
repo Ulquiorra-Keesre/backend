@@ -47,3 +47,6 @@ async def get_current_user(
 
 DatabaseDep = Annotated[AsyncSession, Depends(get_db)]
 CurrentUser = Annotated[UUID, Depends(get_current_user)]
+
+# DatabaseDep = Depends(get_db)
+# CurrentUser = Depends(get_current_user)

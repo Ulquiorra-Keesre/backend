@@ -67,9 +67,9 @@ async def search_items_near(
 ) -> List[ItemResponse]:
     repo = Repository(db)
     items = await repo.items.get_available_items_near(lat, lon, radius_km)
-    return [ItemResponse.from_orm(item) for item in items]
+    return [ItemResponse.model_validate(item) for item in items]
 
 async def get_item_by_id(db: AsyncSession, item_id: UUID) -> Optional[ItemResponse]:
     repo = Repository(db)
     item = await repo.items.get_by_id(Item, item_id)
-    return ItemResponse.from_orm(item) if item else None
+    return ItemResponse.model_validate(item) if item else None

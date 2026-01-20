@@ -8,6 +8,7 @@ from .orm import ReviewRepository
 
 class Repository:
     def __init__(self, session):
+        self.session = session
         self.users = UserRepository(session)
         self.categories = CategoryRepository(session)
         self.items = ItemRepository(session)

@@ -7,6 +7,7 @@ from src.queries import Repository
 from src.models.review import Review
 
 from pydantic import BaseModel, Field
+from datetime import datetime
 
 class ReviewCreate(BaseModel):
     rental_id: UUID
@@ -20,7 +21,7 @@ class ReviewResponse(BaseModel):
     recipient_id: UUID
     rating: int
     comment: str
-    created_at: str
+    created_at: datetime
 
     class Config:
         from_attributes = True

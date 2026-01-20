@@ -4,7 +4,7 @@ from src.models.item import Item
 from src.models.conversation import Conversation
 from src.models.category import Category
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
-from src.api.routes import auth, chats, items, users, categories
+from src.api.routes import auth, chats, items, users, categories, review, rentals
 from src.database.connection import create_tables
 from src.config import settings
 from fastapi import FastAPI, Request
@@ -98,6 +98,8 @@ app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(items.router, prefix="/api/items", tags=["Items"])
 app.include_router(chats.router, prefix="/api/chats", tags=["Chats"])
 app.include_router(categories.router, prefix="/api/categories", tags=["Categories"])
+app.include_router(review.router, prefix="/api/review", tags=["Review"])
+app.include_router(rentals.router, prefix="/api/rentals", tags=["Rentals"])
 
 @app.get("/")
 async def root():
